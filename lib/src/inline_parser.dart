@@ -233,7 +233,7 @@ class EscapeSyntax extends InlineSyntax {
 /// but it is fast. It will leave text like `<a href='hi">` alone, which is
 /// incorrect.
 ///
-/// TODO(srawlins): improve accuracy while ensuring performance, once
+/// TOD(srawlins): improve accuracy while ensuring performance, once
 /// Markdown benchmarking is more mature.
 class InlineHtmlSyntax extends TextSyntax {
   InlineHtmlSyntax() : super(r'<[/!?]?[A-Za-z][A-Za-z0-9-]*(?:\s[^>]*)?>');
@@ -409,7 +409,7 @@ class _DelimiterRun {
       this.isFollowedByPunctuation});
 
   static const String punctuation = r'''!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~''';
-  // TODO(srawlins): Unicode whitespace
+  // TOD(srawlins): Unicode whitespace
   static const String whitespace = ' \t\r\n';
 
   final int? char;
@@ -791,7 +791,7 @@ class LinkSyntax extends TagSyntax {
       if (parser.isDone) {
         return null;
       }
-      // TODO(srawlins): only check 999 characters, for performance reasons?
+      // TOD(srawlins): only check 999 characters, for performance reasons?
     }
 
     final label = buffer.toString();
@@ -847,7 +847,7 @@ class LinkSyntax extends TagSyntax {
           // Not a link (no whitespace allowed within `<...>`).
           return null;
         }
-        // TODO: Follow the backslash spec better here.
+        // TOD: Follow the backslash spec better here.
         // http://spec.commonmark.org/0.28/#backslash-escapes
         if (next != $backslash && next != $gt) {
           buffer.writeCharCode(char);
@@ -1187,7 +1187,7 @@ class TagState {
       return true;
     }
 
-    // TODO: Move this logic into TagSyntax.
+    // TOD: Move this logic into TagSyntax.
     final runLength = endMatch.group(0)!.length;
     final openingRunLength = endPos - startPos;
     final closingMatchStart = parser.pos;

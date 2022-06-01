@@ -1,7 +1,7 @@
-A portable Markdown library written in Dart.
-It can convert between Markdown and Delta.
+# Delta_To_HTML
 
-**The converter is not ready for production**
+A portable Markdown library written in Dart.
+It help to convert Delta To HTML .
 
 ### Usage
 
@@ -9,11 +9,9 @@ It can convert between Markdown and Delta.
 import 'package:delta_markdown/delta_markdown.dart';
 
 void main() {
-  const markdown = 'Hello **Markdown**';
-  print(markdownToDelta(markdown));
 
   const delta = r'[{"insert":"Hello "},{"insert":"Markdown","attributes":{"bold":true}},{"insert":"\n"}]';
-  print(deltaToMarkdown(delta));
+  print(deltaToHTML(delta));
 }
 ```
 

@@ -409,8 +409,12 @@ class CodeBlockSyntax extends BlockSyntax {
         final nextMatch =
             parser.next != null ? pattern.firstMatch(parser.next!) : null;
         if (parser.current.trim() == '' && nextMatch != null) {
-          childLines..add('')..add(nextMatch[1]);
-          parser..advance()..advance();
+          childLines
+            ..add('')
+            ..add(nextMatch[1]);
+          parser
+            ..advance()
+            ..advance();
         } else {
           break;
         }

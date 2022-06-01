@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:collection/collection.dart' show IterableExtension;
-import 'package:flutter_quill/models/documents/attribute.dart';
-import 'package:flutter_quill/models/documents/nodes/embed.dart';
-import 'package:flutter_quill/models/documents/style.dart';
-import 'package:flutter_quill/models/quill_delta.dart';
+import 'package:rich_textfield_editor/models/documents/attribute.dart';
+import 'package:rich_textfield_editor/models/documents/nodes/embed.dart';
+import 'package:rich_textfield_editor/models/documents/style.dart';
+import 'package:rich_textfield_editor/models/quill_delta.dart';
 
 class DeltaMarkdownEncoder extends Converter<String, String> {
   static const _lineFeedAsciiCode = 0x0A;
@@ -67,7 +67,7 @@ class DeltaMarkdownEncoder extends Converter<String, String> {
     // Close the styles in reverse order, e.g. **_ for _**Test**_.
     for (final value
         in currentInlineStyle.attributes.values.toList().reversed) {
-      // TODO(tillf): Is block correct?
+      // TOD(tillf): Is block correct?
       if (value.scope == AttributeScope.BLOCK) {
         continue;
       }
@@ -90,7 +90,7 @@ class DeltaMarkdownEncoder extends Converter<String, String> {
 
     // Now open any new styles.
     for (final attribute in style.attributes.values) {
-      // TODO(tillf): Is block correct?
+      // TOO(tillf): Is block correct?
       if (attribute.scope == AttributeScope.BLOCK) {
         continue;
       }
@@ -213,17 +213,18 @@ class DeltaMarkdownEncoder extends Converter<String, String> {
     bool close = false,
   }) {
     if (attribute.key == Attribute.bold.key) {
-      buffer.write('**');
+      buffer.write(!close ? '<b>' : '</b>');
     } else if (attribute.key == Attribute.italic.key) {
-      buffer.write(!close ? '<em>':'</em>');
-    }else if (attribute.key == Attribute.underline.key) {
-      buffer.write(!close ? '<u>':'</u>');
-    }else if (attribute.key == Attribute.strikeThrough.key) {
-      buffer.write(!close ? '<del>':'</del>');
+      buffer.write(!close ? '<em>' : '</em>');
+    } else if (attribute.key == Attribute.underline.key) {
+      buffer.write(!close ? '<u>' : '</u>');
+    } else if (attribute.key == Attribute.strikeThrough.key) {
+      buffer.write(!close ? '<del>' : '</del>');
     } else if (attribute.key == Attribute.link.key) {
       buffer.write(!close ? '[' : '](${attribute.value})');
-    }else if (attribute.key == Attribute.color.key) {
-      buffer.write(!close ? '<p style="color:${attribute.value}">' : '</p>');
+    } else if (attribute.key == Attribute.color.key) {
+      buffer.write(
+          !close ? '<span style="color:${attribute.value}">' : '</span>');
     } else if (attribute == Attribute.codeBlock) {
       buffer.write(!close ? '```\n' : '\n```');
     } else {
