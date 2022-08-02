@@ -10,8 +10,11 @@ import 'package:delta_markdown/delta_markdown.dart';
 
 void main() {
 
-  const delta = r'[{"insert":"Hello "},{"insert":"Markdown","attributes":{"bold":true}},{"insert":"\n"}]';
-  print(deltaToHTML(delta));
+  const delta =
+      r'[{"insert":"Hello "},{"insert":"Markdown","attributes":{"bold":true}},{"insert":"\n"}]';
+  // print(deltaToHTML(delta));
+  print(DeltaToHTML.encodeJson(delta));
+  
 }
 ```
 

@@ -36,7 +36,8 @@ class InlineParser {
       // Custom link resolvers go after the generic text syntax.
       ..insertAll(1, [
         LinkSyntax(linkResolver: document.linkResolver),
-        ImageSyntax(linkResolver: document.imageLinkResolver)
+        ImageSyntax(linkResolver: document.imageLinkResolver),
+        VideoSyntax(linkResolver: document.videoLinkResolver)
       ]);
   }
 
@@ -47,6 +48,7 @@ class InlineParser {
     LineBreakSyntax(),
     LinkSyntax(),
     ImageSyntax(),
+        VideoSyntax(),
     // Allow any punctuation to be escaped.
     EscapeSyntax(),
     // "*" surrounded by spaces is left alone.
@@ -1082,6 +1084,43 @@ class ImageSyntax extends LinkSyntax {
   }
 }
 
+/// Matches video like `![alternate text](url "optional title")` and
+/// `_[alternate text][label]`.
+class VideoSyntax extends LinkSyntax {
+  VideoSyntax({Resolver? linkResolver})
+      : super(linkResolver: linkResolver, pattern: r'_\[');
+
+  @override
+  Node _createNode(TagState state, String destination, String? title) {
+    final element = Element.empty('video');
+    element.attributes['src'] = escapeHtml(destination);
+    element.attributes['alt'] = state.textContent;
+    if (title != null && title.isNotEmpty) {
+      element.attributes['title'] = escapeAttribute(title);
+    }
+    return element;
+  }
+
+  // Add an image node to [parser]'s AST.
+  //
+  // If [label] is present, the potential image is treated as a reference image.
+  // Otherwise, it is treated as an inline image.
+  //
+  // Returns whether the image was added successfully.
+  @override
+  bool _tryAddReferenceLink(InlineParser parser, TagState state, String label) {
+    final element =
+    _resolveReferenceLink(label, state, parser.document.linkReferences);
+    if (element == null) {
+      return false;
+    }
+    parser
+      ..addNode(element)
+      ..start = parser.pos;
+    return true;
+  }
+}
+
 /// Matches backtick-enclosed inline code blocks.
 class CodeSyntax extends InlineSyntax {
   CodeSyntax() : super(_pattern);
@@ -1096,7 +1135,7 @@ class CodeSyntax extends InlineSyntax {
   //
   // This conforms to the delimiters of inline code, both in Markdown.pl, and
   // CommonMark.
-  static const String _pattern = r'(`+(?!`))((?:.|\n)*?[^`])\1(?!`)';
+  static const String _pattern = r'(`+(?!_`))((?:.|\n)*?[^`])\1(?!`)';
 
   @override
   bool tryMatch(InlineParser parser, [int? startMatchPos]) {

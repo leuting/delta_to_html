@@ -1,10 +1,7 @@
 import 'dart:convert';
 
 import 'package:collection/collection.dart' show IterableExtension;
-import 'package:rich_textfield_editor/models/documents/attribute.dart';
-import 'package:rich_textfield_editor/models/documents/nodes/embed.dart';
-import 'package:rich_textfield_editor/models/documents/style.dart';
-import 'package:rich_textfield_editor/models/quill_delta.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 
 class DeltaMarkdownEncoder extends Converter<String, String> {
   static const _lineFeedAsciiCode = 0x0A;
@@ -161,6 +158,9 @@ class DeltaMarkdownEncoder extends Converter<String, String> {
     } else if (embed.type == 'divider') {
       _writeEmbedTag(lineBuffer, embed);
       _writeEmbedTag(lineBuffer, embed, close: true);
+    } else if (embed.type == 'video') {
+      _writeEmbedTag(lineBuffer, embed);
+      _writeEmbedTag(lineBuffer, embed, close: true);
     }
   }
 
@@ -265,6 +265,7 @@ class DeltaMarkdownEncoder extends Converter<String, String> {
   }) {
     const kImageType = 'image';
     const kDividerType = 'divider';
+    const kVideoType = 'video';
 
     if (embed.type == kImageType) {
       if (close) {
@@ -274,6 +275,12 @@ class DeltaMarkdownEncoder extends Converter<String, String> {
       }
     } else if (embed.type == kDividerType && close) {
       buffer.write('\n---\n\n');
+    } else if (embed.type == kVideoType) {
+      if (close) {
+        buffer.write('](${embed.data})');
+      } else {
+        buffer.write('_[');
+      }
     }
   }
 }

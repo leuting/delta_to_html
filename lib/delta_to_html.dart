@@ -1,15 +1,17 @@
 library delta_to_html;
 
 import 'dart:convert';
+import 'package:flutter_quill/flutter_quill.dart';
+// import 'package:markdown/markdown.dart';
 import 'src/delta_markdown_encoder.dart';
 import 'src/version.dart';
+import 'src/html_renderer.dart';
 
 const version = packageVersion;
 
-/// Codec used to convert between Markdown and Quill deltas.
 const DeltaMarkdownCodec _kCodec = DeltaMarkdownCodec();
 
-String deltaToHTML(String delta) {
+String deltaToMarkdown(String delta) {
   return _kCodec.encode(delta);
 }
 
@@ -21,4 +23,20 @@ class DeltaMarkdownCodec extends Codec<String, String> {
 
   @override
   noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
+class DeltaToHTML {
+  static encode(Delta delta) {
+    final convertedValue = jsonEncode(delta.toJson());
+    final markdown = deltaToMarkdown(convertedValue);
+    final html = markdownToHtml(markdown);
+    return html;
+  }
+
+  static encodeJson(String delta) {
+    final markdown = deltaToMarkdown(delta);
+    print(markdown);
+    final html = markdownToHtml(markdown);
+    return html;
+  }
 }

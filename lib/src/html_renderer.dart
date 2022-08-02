@@ -15,13 +15,15 @@ String markdownToHtml(String markdown,
     ExtensionSet? extensionSet,
     Resolver? linkResolver,
     Resolver? imageLinkResolver,
+      Resolver? videoLinkResolver,
     bool inlineOnly = false}) {
   final document = Document(
       blockSyntaxes: blockSyntaxes,
       inlineSyntaxes: inlineSyntaxes,
       extensionSet: extensionSet,
       linkResolver: linkResolver,
-      imageLinkResolver: imageLinkResolver);
+      imageLinkResolver: imageLinkResolver,
+      videoLinkResolver: videoLinkResolver);
 
   if (inlineOnly) {
     return renderToHtml(document.parseInline(markdown)!);

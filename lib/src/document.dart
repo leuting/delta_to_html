@@ -15,6 +15,7 @@ class Document {
     ExtensionSet? extensionSet,
     this.linkResolver,
     this.imageLinkResolver,
+    this.videoLinkResolver,
   }) : extensionSet = extensionSet ?? ExtensionSet.commonMark {
     _blockSyntaxes
       ..addAll(blockSyntaxes ?? [])
@@ -28,6 +29,7 @@ class Document {
   final ExtensionSet extensionSet;
   final Resolver? linkResolver;
   final Resolver? imageLinkResolver;
+  final Resolver? videoLinkResolver;
   final _blockSyntaxes = <BlockSyntax>{};
   final _inlineSyntaxes = <InlineSyntax>{};
 
